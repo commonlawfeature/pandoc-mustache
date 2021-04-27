@@ -3,7 +3,7 @@ Pandoc filter to apply mustache templates on regular text.
 """
 import yaml
 from jinja2 import StrictUndefined, Template
-from panflute import Code, CodeBlock, Str, run_filter
+from panflute import Code, CodeBlock, RawBlock, Str, run_filter
 
 
 def prepare(doc):
@@ -33,7 +33,7 @@ def prepare(doc):
 
 def action(elem, doc):
     """Apply combined mustache template to all strings in document."""
-    if type(elem) in (Str, CodeBlock, Code) and doc.mhash is not None:
+    if type(elem) in (Str, CodeBlock, Code, RawBlock) and doc.mhash is not None:
         template = Template(source=elem.text, undefined=StrictUndefined)
         elem.text = template.render(**doc.mhash)
         return elem
